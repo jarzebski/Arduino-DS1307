@@ -1,7 +1,7 @@
 /*
 DS1307.h - Header file for the DS1307 Real-Time Clock
 
-Version: 1.0.0
+Version: 1.1.0
 (c) 2014 Korneliusz Jarzebski
 www.jarzebski.pl
 
@@ -50,11 +50,13 @@ struct RTCDateTime
 
 typedef enum
 {
-    DS1307_SQW_1HZ      = 0b00,
-    DS1307_SQW_4096HZ   = 0b01,
-    DS1307_SQW_8192HZ   = 0b10,
-    DS1307_SQW_32768HZ  = 0b11,
-} ds1307_sqwRate_t;
+    DS1307_LOW          = 0x00,
+    DS1307_HIGH         = 0x80,
+    DS1307_1HZ          = 0x10,
+    DS1307_4096HZ       = 0x11,
+    DS1307_8192HZ       = 0x12,
+    DS1307_32768HZ      = 0x13
+} ds1307_sqwOut_t;
 
 class DS1307
 {
@@ -70,30 +72,43 @@ class DS1307
 
 	uint8_t readByte(uint8_t offset);
 	uint8_t writeByte(uint8_t offset, uint8_t data);
+
+	void readMemory(uint8_t offset, uint8_t * buff, uint8_t size);
+	void writeMemory(uint8_t offset, uint8_t * buff, uint8_t size);
+
 	void clearMemory(void);
 
-	void enableSQW(void);
-	void disableSQW(void);
-	void setSQWRate(ds1307_sqwRate_t rate);
-	ds1307_sqwRate_t getSQWRate(void);
-	void setOutput(bool enable);
+	ds1307_sqwOut_t getOutput(void);
+	void setOutput(ds1307_sqwOut_t mode);
+	void setOutput(bool mode);
 
-	char* dateFormat(const char* dateFormat);
+	char* dateFormat(const char* dateFormat, RTCDateTime dt);
 
     private:
 	RTCDateTime t;
 
-	char *strDayOfWeek(int dayOfWeek);
-	char *strMonth(int month);
-	char *strAmPm(int hour, bool uppercase);
+	char *strDayOfWeek(uint8_t dayOfWeek);
+	char *strMonth(uint8_t month);
+	char *strAmPm(uint8_t hour, bool uppercase);
+	char *strDaySufix(uint8_t day);
 
-	long time2long(uint16_t days, uint8_t hours, uint8_t minutes, uint8_t seconds);
+	void readPacket(uint8_t offset, uint8_t * buff, uint8_t size);
+	void writePacket(uint8_t offset, uint8_t * buff, uint8_t size);
+
 	uint8_t hour12(uint8_t hour24);
 	uint8_t bcd2dec(uint8_t bcd);
 	uint8_t dec2bcd(uint8_t dec);
-	uint16_t date2days(void);
+
+	long time2long(uint16_t days, uint8_t hours, uint8_t minutes, uint8_t seconds);
+	uint16_t date2days(uint16_t year, uint8_t month, uint8_t day);
+	uint8_t daysInMonth(uint16_t year, uint8_t month);
+	uint16_t dayInYear(uint16_t year, uint8_t month, uint8_t day);
+	bool isLeapYear(uint16_t year);
+	uint8_t dow(uint16_t y, uint8_t m, uint8_t d);
+
 	uint32_t unixtime(void);
 	uint8_t conv2d(const char* p);
+
 	void writeRegister8(uint8_t reg, uint8_t value);
 	uint8_t readRegister8(uint8_t reg);
 };

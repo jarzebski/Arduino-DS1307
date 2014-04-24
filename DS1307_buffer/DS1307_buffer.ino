@@ -11,22 +11,32 @@
 
 DS1307 clock;
 
+uint8_t buf[56];
 char tmp[16];
 
 void setup()
 {
   Serial.begin(9600);
-
+  
   // Initialize DS1307
   Serial.println("Initialize DS1307");
   clock.begin();
 
   // Fill memory
   Serial.println("Filling memory");
+
   for (byte i = 0; i < 56; i++)
   {
-    clock.writeByte(i, 255-i);
+    buf[i] = i;
   }
+
+  clock.writeMemory(0, buf, 56);
+
+  for (byte i = 0; i < 56; i++)
+  {
+    buf[i] = 0;
+  }    
+
   Serial.println("... Done");
   Serial.println();  
 }
@@ -47,12 +57,14 @@ void loop()
   Serial.println();
   Serial.println("---------------------------------------------------------------------------------------");
 
+  clock.readMemory(0, buf, 56);
+  
   for (byte j = 0; j < 4; j++)
   {
     sprintf(tmp, " 0x%.2X : ", (j*16), 2);
- 
+
     Serial.print(tmp);
- 
+
     for (byte i = 0; i < 16; i++)
     {
       if ((j*16 + i) > 55)
@@ -60,7 +72,7 @@ void loop()
         break;
       }
 
-      sprintf(tmp, "0x%.2X ", clock.readByte(j*16 + i), 2);
+      sprintf(tmp, "0x%.2X ", buf[j*16 + i], 2);
 
       Serial.print(tmp);
     }

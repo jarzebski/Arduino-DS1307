@@ -26,16 +26,17 @@ void setup()
     clock.setDateTime(__DATE__, __TIME__);
   }
 
-  // Enable SQW and set rate to 1Hz
-  clock.setSQWRate(DS1307_SQW_1HZ);
-  clock.enableSQW();
+  // Enable output as rate to 1Hz
+  clock.setOutput(DS1307_1HZ);
 
-  switch (clock.getSQWRate())
+  switch (clock.getOutput())
   {
-    case DS1307_SQW_1HZ:     Serial.println("SQW = 1Hz"); break;
-    case DS1307_SQW_4096HZ:  Serial.println("SQW = 4096Hz"); break;
-    case DS1307_SQW_8192HZ:  Serial.println("SQW = 8192Hz"); break;
-    case DS1307_SQW_32768HZ: Serial.println("SQW = 32768Hz"); break;
+    case DS1307_LOW:     Serial.println("SQW = LOW"); break;
+    case DS1307_HIGH:    Serial.println("SQW = HIGH"); break;
+    case DS1307_1HZ:     Serial.println("SQW = 1Hz"); break;
+    case DS1307_4096HZ:  Serial.println("SQW = 4096Hz"); break;
+    case DS1307_8192HZ:  Serial.println("SQW = 8192Hz"); break;
+    case DS1307_32768HZ: Serial.println("SQW = 32768Hz"); break;
     default: Serial.println("SQW = Unknown"); break; }
 }
 

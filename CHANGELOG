@@ -1,4 +1,13 @@
+DS1307 Arduino Library 1.1.0 / 24.04.2014
+=========================================
+
+ * Simplification SQW/Output. See ds1307_sqw.ino and ds1307_output.ino examples
+ * Allow access to memory via buffers. See ds1307_buffer.ino example
+ * Minor fixes & optimizations
+ * New dateFormat values. The day of the year, Number of days in the given month, leap year, numeric representation of the day of the week and more
+
 DS1307 Arduino Library 1.0.0 / 20.04.2014
 =========================================
 
  * First release
+

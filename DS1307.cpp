@@ -515,7 +515,7 @@ char *DS1307::strDayOfWeek(uint8_t dayOfWeek)
             return "Wednesday";
             break;
         case 4:
-            return "Thrusday";
+            return "Thursday";
             break;
         case 5:
             return "Friday";

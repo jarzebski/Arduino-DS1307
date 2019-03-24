@@ -82,7 +82,7 @@ class DS1307
 	void setOutput(ds1307_sqwOut_t mode);
 	void setOutput(bool mode);
 
-	char* dateFormat(const char* dateFormat, RTCDateTime dt);
+	char* dateFormat(char* output_buffer, const char* dateFormat, RTCDateTime dt);
 
     private:
 	RTCDateTime t;

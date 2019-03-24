@@ -166,11 +166,9 @@ void DS1307::setDateTime(const char* date, const char* time)
     setDateTime(year+2000, month, day, hour, minute, second);
 }
 
-char* DS1307::dateFormat(const char* dateFormat, RTCDateTime dt)
+char* DS1307::dateFormat(char* output_buffer, const char* dateFormat, RTCDateTime dt)
 {
-    char buffer[255];
-
-    buffer[0] = 0;
+    output_buffer[0] = 0;
 
     char helper[11];
 
@@ -181,117 +179,117 @@ char* DS1307::dateFormat(const char* dateFormat, RTCDateTime dt)
             // Day decoder
             case 'd':
                 sprintf(helper, "%02d", dt.day); 
-                strcat(buffer, (const char *)helper); 
+                strcat(output_buffer, (const char *)helper); 
                 break;
             case 'j':
                 sprintf(helper, "%d", dt.day);
-                strcat(buffer, (const char *)helper);
+                strcat(output_buffer, (const char *)helper);
                 break;
             case 'l':
-                strcat(buffer, (const char *)strDayOfWeek(dt.dayOfWeek));
+                strcat(output_buffer, (const char *)strDayOfWeek(dt.dayOfWeek));
                 break;
             case 'D':
-                strncat(buffer, strDayOfWeek(dt.dayOfWeek), 3);
+                strncat(output_buffer, strDayOfWeek(dt.dayOfWeek), 3);
                 break;
             case 'N':
                 sprintf(helper, "%d", dt.dayOfWeek);
-                strcat(buffer, (const char *)helper);
+                strcat(output_buffer, (const char *)helper);
                 break;
             case 'w':
                 sprintf(helper, "%d", (dt.dayOfWeek + 7) % 7);
-                strcat(buffer, (const char *)helper);
+                strcat(output_buffer, (const char *)helper);
                 break;
             case 'z':
                 sprintf(helper, "%d", dayInYear(dt.year, dt.month, dt.day));
-                strcat(buffer, (const char *)helper);
+                strcat(output_buffer, (const char *)helper);
                 break;
             case 'S':
-                strcat(buffer, (const char *)strDaySufix(dt.day));
+                strcat(output_buffer, (const char *)strDaySufix(dt.day));
                 break;
 
             // Month decoder
             case 'm':
                 sprintf(helper, "%02d", dt.month);
-                strcat(buffer, (const char *)helper);
+                strcat(output_buffer, (const char *)helper);
                 break;
             case 'n':
                 sprintf(helper, "%d", dt.month);
-                strcat(buffer, (const char *)helper);
+                strcat(output_buffer, (const char *)helper);
                 break;
             case 'F':
-                strcat(buffer, (const char *)strMonth(dt.month));
+                strcat(output_buffer, (const char *)strMonth(dt.month));
                 break;
             case 'M':
-                strncat(buffer, (const char *)strMonth(dt.month), 3);
+                strncat(output_buffer, (const char *)strMonth(dt.month), 3);
                 break;
             case 't':
                 sprintf(helper, "%d", daysInMonth(dt.year, dt.month));
-                strcat(buffer, (const char *)helper);
+                strcat(output_buffer, (const char *)helper);
                 break;
 
             // Year decoder
             case 'Y':
                 sprintf(helper, "%d", dt.year); 
-                strcat(buffer, (const char *)helper); 
+                strcat(output_buffer, (const char *)helper); 
                 break;
             case 'y': sprintf(helper, "%02d", dt.year-2000);
-                strcat(buffer, (const char *)helper);
+                strcat(output_buffer, (const char *)helper);
                 break;
             case 'L':
                 sprintf(helper, "%d", isLeapYear(dt.year)); 
-                strcat(buffer, (const char *)helper); 
+                strcat(output_buffer, (const char *)helper); 
                 break;
 
             // Hour decoder
             case 'H':
                 sprintf(helper, "%02d", dt.hour);
-                strcat(buffer, (const char *)helper);
+                strcat(output_buffer, (const char *)helper);
                 break;
             case 'G':
                 sprintf(helper, "%d", dt.hour);
-                strcat(buffer, (const char *)helper);
+                strcat(output_buffer, (const char *)helper);
                 break;
             case 'h':
                 sprintf(helper, "%02d", hour12(dt.hour));
-                strcat(buffer, (const char *)helper);
+                strcat(output_buffer, (const char *)helper);
                 break;
             case 'g':
                 sprintf(helper, "%d", hour12(dt.hour));
-                strcat(buffer, (const char *)helper);
+                strcat(output_buffer, (const char *)helper);
                 break;
             case 'A':
-                strcat(buffer, (const char *)strAmPm(dt.hour, true));
+                strcat(output_buffer, (const char *)strAmPm(dt.hour, true));
                 break;
             case 'a':
-                strcat(buffer, (const char *)strAmPm(dt.hour, false));
+                strcat(output_buffer, (const char *)strAmPm(dt.hour, false));
                 break;
 
             // Minute decoder
             case 'i': 
                 sprintf(helper, "%02d", dt.minute);
-                strcat(buffer, (const char *)helper);
+                strcat(output_buffer, (const char *)helper);
                 break;
 
             // Second decoder
             case 's':
                 sprintf(helper, "%02d", dt.second); 
-                strcat(buffer, (const char *)helper); 
+                strcat(output_buffer, (const char *)helper); 
                 break;
 
             // Misc decoder
             case 'U': 
                 sprintf(helper, "%lu", dt.unixtime);
-                strcat(buffer, (const char *)helper);
+                strcat(output_buffer, (const char *)helper);
                 break;
 
             default: 
-                strncat(buffer, dateFormat, 1);
+                strncat(output_buffer, dateFormat, 1);
                 break;
         }
         dateFormat++;
     }
 
-    return buffer;
+    return output_buffer;
 }
 
 RTCDateTime DS1307::getDateTime(void)

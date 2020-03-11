@@ -5,6 +5,8 @@ DS1307 Real-Time Clock.
 
 ![DS1307](http://www.jarzebski.pl/media/full/publish/2014/04/ds1307-df.png)
 
+Changes were made to adapt project to scor project.
+
 I need your help
 ----------------
 

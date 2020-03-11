@@ -82,7 +82,13 @@ class DS1307
 	void setOutput(ds1307_sqwOut_t mode);
 	void setOutput(bool mode);
 
-	char* dateFormat(const char* dateFormat, RTCDateTime dt);
+	char* dateFormat(char* output_buffer, const char* dateFormat, RTCDateTime dt);
+
+	void addSecons(uint32_t seconds);
+
+	uint32_t unixtime(void);
+
+	RTCDateTime inflateRTCDateTime(uint32_t t);
 
     private:
 	RTCDateTime t;
@@ -106,7 +112,6 @@ class DS1307
 	bool isLeapYear(uint16_t year);
 	uint8_t dow(uint16_t y, uint8_t m, uint8_t d);
 
-	uint32_t unixtime(void);
 	uint8_t conv2d(const char* p);
 
 	void writeRegister8(uint8_t reg, uint8_t value);
